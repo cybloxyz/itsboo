@@ -4,15 +4,17 @@ import os
 import numpy as np
 import subprocess as sp
 import pyttsx3
+import time
 
 engine = pyttsx3.init()
 engine.setProperty('volume', 0.5)  # 50% volume
 rate = engine.getProperty('rate')
-engine.setProperty('rate', rate - 50) 
+engine.setProperty('rate', rate - 60) 
 
 faces_dir = "faces"
 known_face_encodings = []
 known_face_names = []
+hon = "na"
 
 speech_started = False
 
@@ -29,6 +31,10 @@ for filename in os.listdir(faces_dir):
             known_face_names.append(os.path.splitext(filename)[0])
             
 cam = cv2.VideoCapture(0)
+
+def what():
+    cam.release()
+    cv2.destroyAllWindows()
 
 while True:
     ret, frame = cam.read()
@@ -69,16 +75,19 @@ while True:
         bottom *= 4
         left *= 4
         cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2)
-        if face_names == name:
-            cv2.putText(frame, (left, top-20), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255), 2)
+        
+       if name == na:
+           cv2.putText(frame, "yes it's you <3", (left, top-10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,255,0), 2)
+           if not speech_started:
+               engine.say("yes it is you and will always you")
+               engine.runAndWait()
+               run_speech()
+               speech_started = True
+      
         else:
-            cv2.putText(frame, name, (left, top-10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,255,0), 2)
-            if name == "aski" and not speech_started:
-                cv2.putText(frame, "omg that's my girl!", (right-60, top-40), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255), 2)
-                engine.say("welcome home..")
-                engine.runAndWait()
-                run_speech()
-                speech_started = True
+            cv2.putText(frame, f"{name} no it isn't you", (left, top-20), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255), 2)
+
+            
     cv2.imshow("approving..", frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
