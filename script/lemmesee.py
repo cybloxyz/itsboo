@@ -5,21 +5,36 @@ import numpy as np
 import subprocess as sp
 import pyttsx3
 import time
+import mediapipe as mp
 
+#hands
+mp_hands = mp.solutions.hands
+mp_drawing = mp.solutions.drawing_utils
+hands = mp_hands.Hands()
+
+#sounds
 engine = pyttsx3.init()
 engine.setProperty('volume', 0.5)  # 50% volume
 rate = engine.getProperty('rate')
 engine.setProperty('rate', rate - 60) 
 
+#faces
+cam = cv2.VideoCapture(0)
 faces_dir = "faces"
 known_face_encodings = []
 known_face_names = []
 hon = "na"
 
+#flag
 speech_started = False
 
+#definition
 def run_speech():
     sp.Popen(["python3", "talk/talk.py"])
+    
+def what():
+    cam.release()
+    cv2.destroyAllWindows()
 
 for filename in os.listdir(faces_dir):
     if filename.endswith(".jpg")or filename.endswith(".png"):
@@ -30,16 +45,21 @@ for filename in os.listdir(faces_dir):
             known_face_encodings.append(encoding[0])
             known_face_names.append(os.path.splitext(filename)[0])
             
-cam = cv2.VideoCapture(0)
-
-def what():
-    cam.release()
-    cv2.destroyAllWindows()
-
+            
 while True:
     ret, frame = cam.read()
     if not ret:
         break
+    
+    #Hands recognition
+    image_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    results = hands.process(image_rgb)
+    
+    if results.multi_hand_landmarks:
+        for hand_landmarks in results.multi_hand_landmarks:
+            mp_drawing.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)
+            
+
     
     small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
     rgb_small_frame = cv2.cvtColor(small_frame, cv2.COLOR_BGR2RGB)
@@ -76,7 +96,7 @@ while True:
         left *= 4
         cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2)
         
-       if name == na:
+        if name == "na":
            cv2.putText(frame, "yes it's you <3", (left, top-10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,255,0), 2)
            if not speech_started:
                engine.say("yes it is you and will always you")
