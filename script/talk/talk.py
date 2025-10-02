@@ -29,7 +29,7 @@ for phrase in speech:
     if 'move' in text:
         print("i'll move on")
         arduino.write(b'move\n')
-        engine.say("miss you..")
+        engine.say("you are my everything..")
         engine.runAndWait()
         pygame.mixer.music.play()
         # tunggu musik selesai biar tidak langsung exit

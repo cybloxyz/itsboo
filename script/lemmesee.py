@@ -8,6 +8,8 @@ import time
 import mediapipe as mp
 from sklearn.neighbors import KNeighborsClassifier
 import threading
+import pyaudio
+import vosk
 
 #speech_gesture
 speechg = {
@@ -27,7 +29,6 @@ speechg = {
     "love_you" : "i love you"
  }
 
-spoken = set()
 
 #hands
 mp_hands = mp.solutions.hands
@@ -45,6 +46,11 @@ engine = pyttsx3.init()
 engine.setProperty('volume', 0.5)  # 50% volume
 rate = engine.getProperty('rate')
 engine.setProperty('rate', rate - 60) 
+spoken = set()
+
+#AI-based voice
+model = Model(r"./vosk-model-small-en-us-0.15")
+recognizer =
 
 #faces
 cam = cv2.VideoCapture(0)
@@ -130,6 +136,8 @@ while True:
             gesture = pred[0]
                 
             print( gesture )
+            if gesture == "love_you":
+                run_speech() 
                         
             cv2.putText(frame, f"{pred[0]}", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1 , (0,255,0), 3)
     
@@ -173,7 +181,7 @@ while True:
            cv2.putText(frame, "yes it's you <3", (left, top-10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,255,0), 2)
            if not speech_started:
                engine.say("hello, it is nice to see you here..")
-               engine.runAndWait()             
+               engine.runAndWait()            
                speech_started = True
       
         else:

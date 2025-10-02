@@ -4,75 +4,94 @@
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
-
 const char* lyrics[] = {
-  "everyone wants",
-  " him",
-  "that was",
-  " my crime",
-  "the wrong place",
-  "at the..",
-  " right time",
-  "and i..",
-  " break down",
-  "then he's",
-  " pullin' me in",
-  "in the world of boys",
-  "  he's a",
-  " gentleman <3"
+    "how can i",
+    "move on?",
+    "when",
+    "i'm still",
+    "in love <3",
+    "with you!",
+    "'cause if one day",
+    "you wake up",
+    "and find that you're",
+    "missing me",
+    "then your heart",
+    "starts to wonder",
+    "where on this earth",
+    "i could be",
+    "thinkin' maybe",
+    "you'll come back",
+    "here to the place",
+    "that we'd meet",
+    "and you'll see me",
+    "waiting for you",
+    "on the corner",
+    "of the street",
+    "so i'm not",
+    "moving..",
+    "i'm not moving"
 };
 
-// Array waktu tampil masing-masing lirik (ms)
 const unsigned long durations[] = {
-  2500, // everyone wants
-  800, //him
-  800, // that was 
-  1000,//my crime
-  1500, // the wrong place
-  1000, // at the 
-  600,//right time
-  1000, // and i
-  800, //break down
-  500, // then he's 
-  800,//pullin' me in
-  600, // in the world of boys
-  500,  // he's a 
-  1000,//gentleman
+  1000,
+  1000,
+  1100,
+  550,
+  650,
+  550,
+  1500,
+  520,
+  800,
+  1000,
+  900,
+  900,
+  900,
+  2000,
+  800,
+  1000,
+  2000,
+  1000,
+  1200,
+  1000,
+  1000,
+  1000,
+  1000,
+  1000,
+  2500,
+  5000
 };
-const int numLyrics = sizeof(lyrics)/sizeof(lyrics[0]);
+
+const int numLyrics - sizeof(lyrics) / sizeof(lyrics[0]);
+int currentLine = 0;
+unsigned long previousMillis = 0;
 
 void setup() {
   lcd.begin();
   lcd.backlight();
   lcd.clear();
-  Serial.begin(9600);
-  lcd.print("Waiting you...");
+  lcd.setCursor(0, 0);
+  lcd.print("playing song...")
 }
 
 void loop() {
-  if (Serial.available() > 0) {
-    String cmd = Serial.readStringUntil('\n');
-    cmd.trim();
+  unsigned long currentMillis = millis();
 
-    if (cmd == "move") {
-      // jalankan lagu sekali
-      for (int i = 0; i < numLyrics; i++) {
-        lcd.clear();
-        if (strlen(lyrics[i]) <= 16) {
-          lcd.setCursor(0, 0);
-          lcd.print(lyrics[i]);
-          delay(durations[i]);
-        } else {
-          for (size_t j = 0; j <= strlen(lyrics[i])-16; j++) {
-            lcd.setCursor(0,0);
-            lcd.print(String(lyrics[i]).substring(j,j+16));
-            delay(300);
-          }
-          delay(durations[i]);
-        }
+  if (currentMillis - previousMillis >= durations[currentLine]) {
+    previousMillis = currentMillis;
+    lcd.clear();
+
+    if (strlen(lyrics[currentLine]) <= 16) {
+      lcd.setCursor(0, 0);
+      lcd.print(lyrics[currentLine]);
+    } else {
+      for (size_t i = 0; i <= strlen(lyrics[currentLine]) - 16; i++) {
+        lcd.setCursor(0, 0)
+        lcd.print(string(lyrics[currentLine]).substring(i, i + 16));
+        delay(300);
       }
-      lcd.clear();
-      lcd.print("Done");
     }
+
+    currentLine++;
+    if (currentLine >= numLyrics) currentLine = 0;
   }
 }
