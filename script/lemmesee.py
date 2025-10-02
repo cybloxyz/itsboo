@@ -6,11 +6,18 @@ import subprocess as sp
 import pyttsx3
 import time
 import mediapipe as mp
+from sklearn.neighbors import KNeighborsClassifier
 
 #hands
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
 hands = mp_hands.Hands()
+#hand sign
+sign_dir = "gestures"
+x = []
+y = []
+known_sign = []
+know_sign_encodings = []
 
 #sounds
 engine = pyttsx3.init()
@@ -44,7 +51,32 @@ for filename in os.listdir(faces_dir):
         if len(encoding)>0:
             known_face_encodings.append(encoding[0])
             known_face_names.append(os.path.splitext(filename)[0])
-            
+
+x = []
+y = []
+
+for filename in os.listdir(sign_dir):
+    if filename.endswith(".npy"):
+        path = os.path.join(sign_dir, filename)
+        data = np.load(path)
+
+        # pastikan 2D: 1 sample -> (1, 63)
+        if data.ndim == 1:
+            data = data.reshape(1, -1)
+
+        label = os.path.splitext(filename)[0]
+
+        for sample in data:
+            x.append(sample)
+            y.append(label)
+
+x = np.array(x)  # sekarang pasti (total_samples, 63)
+y = np.array(y)  # (total_samples,)
+print(f"x shape: {x.shape}, y shape: {y.shape}")
+
+
+clf = KNeighborsClassifier(n_neighbors=3)
+clf.fit(x, y)
             
 while True:
     ret, frame = cam.read()
@@ -54,11 +86,25 @@ while True:
     #Hands recognition
     image_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     results = hands.process(image_rgb)
-    
+
+#sign  recognition 
     if results.multi_hand_landmarks:
         for hand_landmarks in results.multi_hand_landmarks:
             mp_drawing.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)
+            basex, basey, basez = (
+                hand_landmarks.landmark[0].x,
+                hand_landmarks.landmark[0].y,
+                hand_landmarks.landmark[0].z
+            )
+            landmarks = []
+            for lm in hand_landmarks.landmark:
+                landmarks.append([lm.x - basex, lm.y - basey, lm.z - basez])
+            landmarks = np.array(landmarks).flatten()
             
+            pred = clf.predict([landmarks])
+            print("gesture: ", pred[0])
+            
+            cv2.putText(frame, f"gesture: {pred[0]}", (50, 50), cv2.FONT_HERSHEY_COMPLEX, 1, (0,255,0), 2)
 
     
     small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
@@ -101,7 +147,7 @@ while True:
            if not speech_started:
                engine.say("yes it is you and will always you")
                engine.runAndWait()
-               run_speech()
+              
                speech_started = True
       
         else:
