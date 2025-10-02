@@ -7,6 +7,27 @@ import pyttsx3
 import time
 import mediapipe as mp
 from sklearn.neighbors import KNeighborsClassifier
+import threading
+
+#speech_gesture
+speechg = {
+    "halo" : "hello",
+    "aku" : "i am",
+    "mau" : "want",
+    "belajar" : "study",
+    "senang berkenalan" : "nice to meet you",
+    "na" : "nafisa",
+    "peace" : "peace",
+    "sama sama" : "you are welcome",
+    "fuck" : "fuck",
+    "maaf" : "sorry",
+    "good" : "good",
+    "thanks" : "thank you",
+    "tolong" : "help",
+    "love_you" : "i love you"
+ }
+
+spoken = set()
 
 #hands
 mp_hands = mp.solutions.hands
@@ -38,6 +59,10 @@ speech_started = False
 #definition
 def run_speech():
     sp.Popen(["python3", "talk/talk.py"])
+    
+def speak(text):
+    engine.say(text)
+    engine.runAndWait()
     
 def what():
     cam.release()
@@ -102,11 +127,13 @@ while True:
             landmarks = np.array(landmarks).flatten()
             
             pred = clf.predict([landmarks])
-            print("gesture: ", pred[0])
-            
-            cv2.putText(frame, f"gesture: {pred[0]}", (50, 50), cv2.FONT_HERSHEY_COMPLEX, 1, (0,255,0), 2)
-
+            gesture = pred[0]
+                
+            print( gesture )
+                        
+            cv2.putText(frame, f"{pred[0]}", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1 , (0,255,0), 3)
     
+            
     small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
     rgb_small_frame = cv2.cvtColor(small_frame, cv2.COLOR_BGR2RGB)
     
@@ -145,13 +172,13 @@ while True:
         if name == "na":
            cv2.putText(frame, "yes it's you <3", (left, top-10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,255,0), 2)
            if not speech_started:
-               engine.say("yes it is you and will always you")
-               engine.runAndWait()
-              
+               engine.say("hello, it is nice to see you here..")
+               engine.runAndWait()             
                speech_started = True
       
         else:
             cv2.putText(frame, f"{name} no it isn't you", (left, top-20), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255), 2)
+            
 
             
     cv2.imshow("approving..", frame)
