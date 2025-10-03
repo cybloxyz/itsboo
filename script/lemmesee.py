@@ -13,7 +13,7 @@ import vosk
 import serial
 
 #serial initial
-arduino = serial.Serial('/dev/ttyACM0', 9600, timeout=1 )
+arduino = serial.Serial('/dev/ttyACM1', 9600, timeout=1 )
 time.sleep(2)
 
 #speech_gesture
@@ -112,9 +112,12 @@ clf.fit(x, y)
             
 while True:
     if arduino.in_waiting > 0:
-        msg = arduino.readline().decode().strip()
-        if msg == "pressed":
-            print("changing face...")
+        msg = arduino.readline().decode(errors="ignore").strip()
+        print("arduino >> ", repr(msg))
+        if msg == "Toggle ON":
+            print("\nmusic activated...\n")
+        elif msg == "Toggle  OFF":
+            print("music deactivated...")
             
     ret, frame = cam.read()
     if not ret:
