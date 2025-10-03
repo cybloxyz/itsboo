@@ -10,6 +10,11 @@ from sklearn.neighbors import KNeighborsClassifier
 import threading
 import pyaudio
 import vosk
+import serial
+
+#serial initial
+arduino = serial.Serial('/dev/tty/ACM0', 9600, timeout=1 )
+time.sleep(2)
 
 #speech_gesture
 speechg = {
@@ -135,9 +140,56 @@ while True:
             pred = clf.predict([landmarks])
             gesture = pred[0]
                 
-            print( gesture )
+            print(gesture)
             if gesture == "love_you":
-                run_speech() 
+                arduino.write(b'love\n')
+                
+            elif gesture == "aku":
+                arduino.write(b'i\n')
+                
+            elif gesture == "good":
+                arduino.write(b'good\n')
+                
+            elif gesture == "belajar":
+                arduino.write(b'bel\n')
+                
+            elif gesture == "fuck":
+                arduino.write(b'fuck\n')
+                
+            elif gesture == 'halo':
+                arduino.write(b'hi\n')
+                
+            elif gesture == 'kamu':
+                arduino.write(b'u\n')
+                
+            elif gesture == "mau":
+                arduino.write(b'wa\n')
+                
+            elif gesture == "na":
+                arduino.write(b'na\n')
+                
+            elif gesture == "no":
+                arduino.write(b'no\n')
+                
+            elif gesture == "peace":
+                arduino.write(b'pis\n')
+                
+            elif gesture == "sama sama":
+                arduino.write(b'sama\n')
+                
+            elif gesture == "senang berkenalan":
+                arduino.write(b'nice\n')
+                
+            elif gesture == "sorry":
+                arduino.write(b'sorry\n')
+                
+            elif gesture == "thanks":
+                arduino.write(b'thx\n')
+                
+            elif gesture == "tolong":
+                arduino.write(b'help\n')
+            else:
+                pass
                         
             cv2.putText(frame, f"{pred[0]}", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1 , (0,255,0), 3)
     
