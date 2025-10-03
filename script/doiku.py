@@ -10,6 +10,7 @@ while True:
     cv2.imshow('Image', img)
     if cv2.waitKey(1) == ord('c'):
         cv2.imwrite('faces/' + name + ".jpg", img)
+        print(f"{name} saved to faces/")
         break
     
 cam.release()

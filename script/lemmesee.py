@@ -13,7 +13,7 @@ import vosk
 import serial
 
 #serial initial
-arduino = serial.Serial('/dev/tty/ACM0', 9600, timeout=1 )
+arduino = serial.Serial('/dev/ttyACM0', 9600, timeout=1 )
 time.sleep(2)
 
 #speech_gesture
@@ -52,10 +52,6 @@ engine.setProperty('volume', 0.5)  # 50% volume
 rate = engine.getProperty('rate')
 engine.setProperty('rate', rate - 60) 
 spoken = set()
-
-#AI-based voice
-model = Model(r"./vosk-model-small-en-us-0.15")
-recognizer =
 
 #faces
 cam = cv2.VideoCapture(0)
@@ -101,7 +97,7 @@ for filename in os.listdir(sign_dir):
             data = data.reshape(1, -1)
 
         label = os.path.splitext(filename)[0]
-
+ 
         for sample in data:
             x.append(sample)
             y.append(label)
@@ -142,28 +138,28 @@ while True:
                 
             print(gesture)
             if gesture == "love_you":
-                arduino.write(b'love\n')
+                arduino.write(b'love you <3\n')
                 
             elif gesture == "aku":
-                arduino.write(b'i\n')
+                arduino.write(b'i am\n')
                 
             elif gesture == "good":
                 arduino.write(b'good\n')
                 
             elif gesture == "belajar":
-                arduino.write(b'bel\n')
+                arduino.write(b'study\n')
                 
             elif gesture == "fuck":
                 arduino.write(b'fuck\n')
                 
             elif gesture == 'halo':
-                arduino.write(b'hi\n')
+                arduino.write(b'hello\n')
                 
             elif gesture == 'kamu':
-                arduino.write(b'u\n')
+                arduino.write(b'you\n')
                 
             elif gesture == "mau":
-                arduino.write(b'wa\n')
+                arduino.write(b'want\n')
                 
             elif gesture == "na":
                 arduino.write(b'na\n')
@@ -172,19 +168,19 @@ while True:
                 arduino.write(b'no\n')
                 
             elif gesture == "peace":
-                arduino.write(b'pis\n')
+                arduino.write(b'peace\n')
                 
             elif gesture == "sama sama":
-                arduino.write(b'sama\n')
+                arduino.write(b'you\'re welcome!\n')
                 
             elif gesture == "senang berkenalan":
-                arduino.write(b'nice\n')
+                arduino.write(b'nice to meet u\n')
                 
             elif gesture == "sorry":
                 arduino.write(b'sorry\n')
                 
             elif gesture == "thanks":
-                arduino.write(b'thx\n')
+                arduino.write(b'thank you\n')
                 
             elif gesture == "tolong":
                 arduino.write(b'help\n')
