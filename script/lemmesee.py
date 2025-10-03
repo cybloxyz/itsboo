@@ -111,6 +111,11 @@ clf = KNeighborsClassifier(n_neighbors=3)
 clf.fit(x, y)
             
 while True:
+    if arduino.in_waiting > 0:
+        msg = arduino.readline().decode().strip()
+        if msg == "pressed":
+            print("changing face...")
+            
     ret, frame = cam.read()
     if not ret:
         break
