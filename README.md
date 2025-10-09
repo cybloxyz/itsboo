@@ -1,4 +1,4 @@
-![Hackatime Badge](https://hackatime-badge.hackclub.com/U09DKPTAYN4/photoboo)
+https://img.shields.io/badge/hackatime-34h_16m-blue
 
 # 🖐️ Hand Sign, Face Recognition & Gestures Piano 🎹🎼
 
