@@ -1,5 +1,3 @@
-https://img.shields.io/badge/hackatime-34h_16m-blue
-
 # 🖐️ Hand Sign, Face Recognition & Gestures Piano 🎹🎼
 
 Hand Sign Recognition with Face Detection is an interactive computer vision project that combines gesture recognition and facial identification into one unified system.
@@ -30,3 +28,6 @@ Includes a script so you can add and recognize your own custom movements.
 One version is integrated with Arduino + LCD (for hardware display).
 
 The other version is standalone, so you can run it without Arduino.
+
+![Hacktime Badge](https://img.shields.io/badge/hackatime-34h_16m-blue)
+
