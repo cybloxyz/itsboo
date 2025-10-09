@@ -29,5 +29,5 @@ One version is integrated with Arduino + LCD (for hardware display).
 
 The other version is standalone, so you can run it without Arduino.
 
-![Hacktime Badge](https://img.shields.io/badge/hackatime-34h_16m-blue) ![nfnaa](https://img.shields.io/badge/nfnaa-origin-fedcba)
+![nfnaa](https://img.shields.io/badge/nfnaa-origin-fedcba)
 
