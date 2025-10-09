@@ -11,9 +11,25 @@ import threading
 import pyaudio
 import vosk
 import serial
+import pygame
+
+#music
+pygame.mixer.init()
+pygame.mixer.music.set_volume(0.5)
+
+pianos = {
+    "peace" : "piano/a6.mp3",
+    "hello" : "piano/b6.mp3",
+    "c6" : "piano/c6.mp3",
+    "d6" : "piano/d6.mp3",
+    "e6" : "piano/e6.mp3",
+    "f6" : "piano/f6.mp3",
+    "g" : "piano/g.mp3",
+    "g6" : "piano/g6.mp3"
+}
 
 #serial initial
-arduino = serial.Serial('/dev/ttyACM1', 9600, timeout=1 )
+arduino = serial.Serial('/dev/ttyACM0', 9600, timeout=1 )
 time.sleep(2)
 
 #speech_gesture
@@ -33,6 +49,64 @@ speechg = {
     "tolong" : "help",
     "love_you" : "i love you"
  }
+
+def resource_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("."), relative_path)
+
+faces_path = resource_path("faces")
+
+def handsign():
+            if gesture == "love_you":
+                arduino.write(b'love you <3\n')
+                
+            elif gesture == "aku":
+                arduino.write(b'i am\n')
+                
+            elif gesture == "good":
+                arduino.write(b'good\n')
+                
+            elif gesture == "belajar":
+                arduino.write(b'study\n')
+                
+            elif gesture == "fuck":
+                arduino.write(b'fuck\n')
+                
+            elif gesture == 'halo':
+                arduino.write(b'hello\n')
+                
+            elif gesture == 'kamu':
+                arduino.write(b'you\n')
+                
+            elif gesture == "mau":
+                arduino.write(b'want\n')
+                
+            elif gesture == "na":
+                arduino.write(b'na\n')
+                
+            elif gesture == "no":
+                arduino.write(b'no\n')
+                
+            elif gesture == "peace":
+                arduino.write(b'peace\n')
+                
+            elif gesture == "sama sama":
+                arduino.write(b'you\'re welcome!\n')
+                
+            elif gesture == "senang berkenalan":
+                arduino.write(b'nice to meet u\n')
+                
+            elif gesture == "sorry":
+                arduino.write(b'sorry\n')
+                
+            elif gesture == "thanks":
+                arduino.write(b'thank you\n')
+                
+            elif gesture == "tolong":
+                arduino.write(b'help\n')
+            else:
+                pass
 
 
 #hands
@@ -63,6 +137,23 @@ hon = "na"
 #flag
 speech_started = False
 
+
+def piano():
+    if gesture == "hello":
+        pygame.mixer.music.load("piano/b6.mp3")
+        pygame.mixer.music.play()
+    
+    elif gesture == "peace":
+        pygame.mixer.music.load("piano/b6.mp3")
+        pygame.mixer.music.play()
+
+music = False   
+gesture = "c6"
+if music == True:
+    piano()
+else:
+    pass
+    
 #definition
 def run_speech():
     sp.Popen(["python3", "talk/talk.py"])
@@ -116,8 +207,11 @@ while True:
         print("arduino >> ", repr(msg))
         if msg == "Toggle ON":
             print("\nmusic activated...\n")
+            music = True
+            
         elif msg == "Toggle  OFF":
-            print("music deactivated...")
+            print("\nmusic deactivated...\n")
+            music = False
             
     ret, frame = cam.read()
     if not ret:
@@ -145,55 +239,8 @@ while True:
             gesture = pred[0]
                 
             print(gesture)
-            if gesture == "love_you":
-                arduino.write(b'love you <3\n')
-                
-            elif gesture == "aku":
-                arduino.write(b'i am\n')
-                
-            elif gesture == "good":
-                arduino.write(b'good\n')
-                
-            elif gesture == "belajar":
-                arduino.write(b'study\n')
-                
-            elif gesture == "fuck":
-                arduino.write(b'fuck\n')
-                
-            elif gesture == 'halo':
-                arduino.write(b'hello\n')
-                
-            elif gesture == 'kamu':
-                arduino.write(b'you\n')
-                
-            elif gesture == "mau":
-                arduino.write(b'want\n')
-                
-            elif gesture == "na":
-                arduino.write(b'na\n')
-                
-            elif gesture == "no":
-                arduino.write(b'no\n')
-                
-            elif gesture == "peace":
-                arduino.write(b'peace\n')
-                
-            elif gesture == "sama sama":
-                arduino.write(b'you\'re welcome!\n')
-                
-            elif gesture == "senang berkenalan":
-                arduino.write(b'nice to meet u\n')
-                
-            elif gesture == "sorry":
-                arduino.write(b'sorry\n')
-                
-            elif gesture == "thanks":
-                arduino.write(b'thank you\n')
-                
-            elif gesture == "tolong":
-                arduino.write(b'help\n')
-            else:
-                pass
+            handsign()
+
                         
             cv2.putText(frame, f"{pred[0]}", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1 , (0,255,0), 3)
     
