@@ -4,45 +4,19 @@ import os
 import numpy as np
 import subprocess as sp
 import pyttsx3
-import time
 import mediapipe as mp
 from sklearn.neighbors import KNeighborsClassifier
 import pygame
+import sys
 
-#music
-pygame.mixer.init()
-pygame.mixer.music.set_volume(0.5)
+def resource_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("."), relative_path)
 
-pianos = {
-    "peace" : "piano/a6.mp3",
-    "hello" : "piano/b6.mp3",
-    "c6" : "piano/c6.mp3",
-    "d6" : "piano/d6.mp3",
-    "e6" : "piano/e6.mp3",
-    "f6" : "piano/f6.mp3",
-    "g" : "piano/g.mp3",
-    "g6" : "piano/g6.mp3"
-}
+faces_path = resource_path("faces")
 
-#speech_gesture
-speechg = {
-    "halo" : "hello",
-    "aku" : "i am",
-    "mau" : "want",
-    "belajar" : "study",
-    "senang berkenalan" : "nice to meet you",
-    "na" : "nafisa",
-    "peace" : "peace",
-    "sama sama" : "you are welcome",
-    "fuck" : "fuck",
-    "maaf" : "sorry",
-    "good" : "good",
-    "thanks" : "thank you",
-    "tolong" : "help",
-    "love_you" : "i love you"
- }
-
-
+speech_started = False
 
 #hands
 mp_hands = mp.solutions.hands
@@ -67,19 +41,7 @@ cam = cv2.VideoCapture(0)
 faces_dir = "faces"
 known_face_encodings = []
 known_face_names = []
-hon = "na"
 
-#flag
-speech_started = False
-
-    
-def speak(text):
-    engine.say(text)
-    engine.runAndWait()
-    
-def what():
-    cam.release()
-    cv2.destroyAllWindows()
 
 for filename in os.listdir(faces_dir):
     if filename.endswith(".jpg")or filename.endswith(".png"):
@@ -184,14 +146,14 @@ while True:
         cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2)
         
         if name == "na":
-           cv2.putText(frame, "yes it's you <3", (left, top-10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,255,0), 2)
+           cv2.putText(frame, f"hello {name} <3", (left, top-10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,255,0), 2)
            if not speech_started:
                engine.say("hello, it is nice to see you here..")
                engine.runAndWait()            
                speech_started = True
       
         else:
-            cv2.putText(frame, f"{name} no it isn't you", (left, top-20), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255), 2)
+            cv2.putText(frame, f"hello! {name}", (left, top-20), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255), 2)
             
 
             
