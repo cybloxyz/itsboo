@@ -1,3 +1,5 @@
+![Hackatime Badge](https://hackatime-badge.hackclub.com/U09DKPTAYN4/photoboo)
+
 # 🖐️ Hand Sign & Face Recognition
 
 Hand Sign Recognition with Face Detection is an interactive computer vision project that combines gesture recognition and facial identification into one unified system.
