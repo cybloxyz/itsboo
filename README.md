@@ -9,7 +9,7 @@ That’s how this project was born — and I’ll keep developing it into versio
 
 and the other one, Gestures Piano is a fun and creative project where you can play a piano with only hand-gesture to camera!
 
-# 🌟 Features
+## 🌟 Features
 
 ✋ Hand Sign Recognition
 Detects and classifies various hand gestures using MediaPipe and OpenCV.
@@ -28,6 +28,20 @@ Includes a script so you can add and recognize your own custom movements.
 One version is integrated with Arduino + LCD (for hardware display).
 
 The other version is standalone, so you can run it without Arduino.
+
+## documenatation 📷
+### piano 🎹🎼
+For guide notes, please find on the releases page
+
+https://github.com/user-attachments/assets/9b3911b7-9be1-4a1a-8846-5f2b5d2cca45
+### handsign without arduino ✋
+The Arduino that I used in this project I have used to assemble into a new project, because I only have one Arduino
+
+https://github.com/user-attachments/assets/f53500e3-4952-4f99-9f11-00d14e17d0fd
+
+
+
+
 
 ![nfnaa](https://img.shields.io/badge/nfnaa-origin-fedcba)
 
