@@ -43,5 +43,6 @@ https://github.com/user-attachments/assets/f53500e3-4952-4f99-9f11-00d14e17d0fd
 
 
 
-![nfnaa](https://img.shields.io/badge/nfnaa-origin-fedcba)
+![nfnaa](https://img.shields.io/badge/nfnaa-origin-fedcba) 
+![Hackatime Badge](https://hackatime-badge.hackclub.com/U09DKPTAYN4/photoboo)
 
